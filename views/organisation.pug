@@ -2,7 +2,7 @@ extends layout
 
 block content
   h1= title
-  - var results = [{"organisationName":"public","oraganisationMembers":100,"organisationChairman":"Anusha","location":"Hyderabad"},{"organisationName":"Foriegn","oraganisationMembers":75,"organisationChairman":"Ganesh","location":"Miyapur"},{"organisationName":"private","oraganisationMembers":250,"organisationChairman":"Deetya sri","location":"Banglore"}];
+  - var results = results ;
   div(class="container-fluid")
     div(class="row")
     each item in results
