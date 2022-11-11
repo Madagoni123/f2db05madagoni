@@ -12,10 +12,7 @@ exports.organisation_list = async function(req, res) {
     }   
 }; 
  
-// for a specific Costume. 
-exports.organisation_detail = function(req, res) { 
-    res.send('NOT IMPLEMENTED: organisation detail: ' + req.params.id); 
-}; 
+ 
  
 // Handle organisation create on POST. 
 exports.organisation_create_post = // Handle organisation create on POST. 
@@ -50,9 +47,25 @@ exports.organisation_delete = function(req, res) {
     res.send('NOT IMPLEMENTED: organisation delete DELETE ' + req.params.id); 
 }; 
  
-// Handle organisation update form on PUT. 
-exports.organisation_update_put = function(req, res) { 
-    res.send('NOT IMPLEMENTED: organisation update PUT' + req.params.id); 
+//Handle organisation update form on PUT. 
+exports.organisation_update_put = async function(req, res) { 
+    console.log(`update on id ${req.params.id} with body 
+${JSON.stringify(req.body)}`) 
+    try { 
+        let toUpdate = await organisation.findById( req.params.id) 
+        // Do updates of properties 
+        if(req.body.organisationName) toUpdate.organisationName = req.body.organisationName; 
+        if(req.body.oraganisationMembers) toUpdate.oraganisationMembers = req.body.oraganisationMembers; 
+        if(req.body.organisationChairman) toUpdate.organisationChairman = req.body.organisationChairman;
+        if(req.body.location) toUpdate.location = req.body.location;  
+        let result = await toUpdate.save(); 
+        console.log("Sucess " + result) 
+        res.send(result) 
+    } catch (err) { 
+        res.status(500) 
+        res.send(`{"error": ${err}: Update for id ${req.params.id} 
+failed`); 
+    } 
 }; 
 // VIEWS 
 // Handle a show all view 
@@ -66,3 +79,15 @@ exports.organisation_view_all_Page = async function(req, res) {
         res.send(`{"error": ${err}}`); 
     }   
 }; 
+// for a specific organisation. 
+exports.organisation_detail = async function(req, res) { 
+    console.log("detail"  + req.params.id) 
+    try { 
+        result = await organisation.findById( req.params.id) 
+        res.send(result) 
+    } catch (error) { 
+        res.status(500) 
+        res.send(`{"error": document for id ${req.params.id} not found`); 
+    } 
+}; 
+ 
