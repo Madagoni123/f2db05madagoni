@@ -1,0 +1,38 @@
+extends layout 
+ 
+block content 
+  h1(class='container-fluid p-5 bg-primarary text-success text-center' , style='background-color:#B233FF')= title 
+ 
+  form(id='organisationForm', action="/resource/organisation", method="POST") 
+    div.form-group 
+        label.organisationAttr(for='organisationName') organisationName 
+        input#organisationName(type='text', name='organisationName') 
+    div.form-group 
+        label.organisationAttr(for='oraganisationMembers') oraganisationMembers
+        input#oraganisationMembers(type='number', name='oraganisationMembers') 
+    div.form-group 
+        label.organisationAttr(for='organisationChairman') organisationChairman 
+        input#organisationChairman(type='text', name='organisationChairman')
+    div.form-group 
+        label.organisationAttr(for='location') location 
+        input#location(type='text', name='location') 
+
+    input(type="submit") 
+ 
+  script. 
+    document.forms['organisationForm'].addEventListener('submit', (event) => { 
+      event.preventDefault(); 
+      // TODO do something here to show user that form is being submitted 
+      fetch(event.target.action, { 
+        method: 'POST', 
+        body: new URLSearchParams(new FormData(event.target)) // event.target is the form 
+      }).then((resp) => { 
+        return resp.json(); // or resp.text() or whatever the server sends 
+      }).then((body) => { 
+        alert("Save succeded") 
+        // TODO handle body 
+      }).catch((error) => { 
+        // TODO handle error 
+        alert("Save failed " + error ) 
+      }); 
+    }); 

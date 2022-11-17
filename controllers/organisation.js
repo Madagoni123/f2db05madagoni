@@ -90,4 +90,74 @@ exports.organisation_detail = async function(req, res) {
         res.send(`{"error": document for id ${req.params.id} not found`); 
     } 
 }; 
+
+// Handle organisation delete on DELETE. 
+exports.organisation_delete = async function(req, res) { 
+    console.log("delete "  + req.params.id) 
+    try { 
+        result = await organisation.findByIdAndDelete( req.params.id) 
+        console.log("Removed " + result) 
+        res.send(result) 
+    } catch (err) { 
+        res.status(500) 
+        res.send(`{"error": Error deleting ${err}}`); 
+    } 
+}; 
+
+ // Handle a show one view with id specified by query 
+ exports.organisation_view_one_Page = async function(req, res) { 
+    console.log("single view for id "  + req.query.id) 
+    try{ 
+        result = await organisation.findById( req.query.id) 
+        res.render('organisationdetail',  
+{ title: 'organisation Detail', toShow: result }); 
+    } 
+    catch(err){ 
+        res.status(500) 
+        res.send(`{'error': '${err}'}`); 
+    } 
+}; 
+
+// Handle building the view for creating a organisation. 
+// No body, no in path parameter, no query. 
+// Does not need to be async 
+exports.organisation_create_Page =  function(req, res) { 
+    console.log("create view") 
+    try{ 
+        res.render('organisationcreate', { title: 'organisation Create'}); 
+    } 
+    catch(err){ 
+        res.status(500) 
+        res.send(`{'error': '${err}'}`); 
+    } 
+}; 
+
+// Handle building the view for updating a organisation. 
+// query provides the id 
+exports.organisation_update_Page =  async function(req, res) { 
+    console.log("update view for item "+req.query.id) 
+    try{ 
+        let result = await organisation.findById(req.query.id) 
+        res.render('organisationupdate', { title: 'organisation Update', toShow: result }); 
+    } 
+    catch(err){ 
+        res.status(500) 
+        res.send(`{'error': '${err}'}`); 
+    } 
+};
+
+
+// Handle a delete one view with id from query 
+exports.organisation_delete_Page = async function(req, res) { 
+    console.log("Delete view for id "  + req.query.id) 
+    try{ 
+        result = await organisation.findById(req.query.id) 
+        res.render('organisationdelete', { title: 'Organisation Delete', toShow: result }); 
+    } 
+    catch(err){ 
+        res.status(500) 
+        res.send(`{'error': '${err}'}`); 
+    } 
+}; 
+
  

@@ -1,0 +1,58 @@
+extends layout 
+ 
+block content 
+  h1(class='container-fluid p-5 bg-primarary text-success text-center' , style='background-color:#B233FF')= title 
+ 
+  if (toShow == null) 
+    h2 No instance to delete 
+  else 
+  - let organisationid = toShow._id 
+  - let organisationName = toShow.organisationName
+  - let oraganisationMembers = toShow.oraganisationMembers 
+  - let organisationChairman = toShow.organisationChairman 
+  - let location = toShow.location 
+    - let actionid = "/resource/organisation/" + organisationid 
+    script let actionid = "#{actionid}" 
+  div(class='justify-content p-2 text-center text-dark')
+    div.row 
+      div(class='p-2 flex-fill organisationAttr mr-3') organisation  is: 
+      div #{organisationid}
+    div.row 
+      div(class='p-2 flex-fill organisationAttr mr-3') organisationName is: 
+      div #{organisationName} 
+    div.row 
+      div(class='p-2 flex-fill organisationAttr mr-3') organisationMembers is: 
+      div #{oraganisationMembers} 
+    div.row 
+      div(class='p-2 flex-fill organisationAttr mr-3') organisationChairman is: 
+      div #{organisationChairman} 
+    div.row 
+      div(class='p-2 flex-fill organisationAttr mr-3') location is: 
+      div #{location}
+ 
+    button(class="btn btn-danger m-2" onclick="deleteOnid()") delete 
+    button(class="btn btn-secondary m-2" onclick="cancel()") Cancel 
+ 
+  script. 
+    function cancel() { 
+      // Go back to the home page for the organisation collection 
+      window.location.href='/organisation' 
+    } 
+  script. 
+    function deleteOnid() { 
+      console.log("starting delete") 
+      // delete first 
+      fetch(actionid, { 
+        method: 'delete'      // Don't need a body for the delete 
+      }).then((resp) => { 
+        return resp.json(); // or resp.text() or whatever the server sends 
+      }).then((body) => { 
+        alert("Delete succeded") 
+        window.location.href='/organisation' 
+        // TODO handle body 
+      }).catch((error) => { 
+        // TODO handle error 
+        alert("Delete failed " + error ) 
+      }); 
+    } 
+ 

@@ -1,0 +1,45 @@
+extends layout 
+ 
+block content 
+  h1(class='container-fluid p-5 bg-primarary text-success text-center' , style='background-color:#B233FF')= title 
+  - let organisationid = toShow._id 
+  - let organisationName = toShow.organisationName
+  - let oraganisationMembers = toShow.oraganisationMembers 
+  - let organisationChairman = toShow.organisationChairman 
+  - let location = toShow.location 
+  div.row(class='mb-2') 
+    div.mr-1 ID is 
+    div #{organisationid} 
+  - let actionid = "/resource/organisation/" + organisationid 
+  form(id='organisationForm', action= actionid, method="PUT") 
+    div.form-group 
+        label.organisationAttr(for='organisationName') organisationName
+        input#organisationName(type='text', name='organisationName', value= organisationName ) 
+    div.form-group 
+        label.organisationAttr(for='oraganisationMembers') oraganisationMembers
+        input#oraganisationMembers(type='number', name='oraganisationMembers', value= oraganisationMembers ) 
+    div.form-group 
+        label.organisationAttr(for='organisationChairman') organisationChairman
+        input#cost(type='text', name='organisationChairman', value= organisationChairman ) 
+    div.form-group 
+        label.organisationAttr(for='location') location
+        input#cost(type='text', name='location', value= location ) 
+    input(type="submit") 
+  script. 
+    document.forms['organisationForm'].addEventListener('submit', (event) => { 
+      event.preventDefault(); 
+      // TODO do something here to show user that form is being submitted 
+      fetch(event.target.action, { 
+        method: 'PUT', 
+        body: new URLSearchParams(new FormData(event.target)) // event.target is the form 
+      }).then((resp) => { 
+        return resp.json(); // or resp.text() or whatever the server sends 
+      }).then((body) => { 
+        alert("Update succeded") 
+        // TODO handle body 
+      }).catch((error) => { 
+        // TODO handle error 
+        alert("Update failed " + error ) 
+      }); 
+    }); 
+ 

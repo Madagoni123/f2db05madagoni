@@ -1,0 +1,25 @@
+extends layout 
+ 
+block content 
+  h1(class='container-fluid p-5 bg-primarary text-success text-center' , style='background-color:#B233FF')= title 
+  - let organisationid = toShow._id 
+  - let organisationName = toShow.organisationName
+  - let oraganisationMembers = toShow.oraganisationMembers 
+  - let organisationChairman = toShow.organisationChairman 
+  - let location = toShow.location 
+  div(class='justify-content p-2 text-center text-dark')
+    div.row 
+      div(class=' p-2 flex-fill organisationAttr mr-3') organisation  ID  is: 
+      div #{organisationid}
+    div.row 
+      div(class='p-2 flex-fill organisationAttr mr-3') organisationName is: 
+      div #{organisationName} 
+    div.row 
+      div(class='p-2 flex-fill organisationAttr mr-3') organisationMembers is: 
+      div #{oraganisationMembers} 
+    div.row 
+      div(class='p-2 flex-fill organisationAttr mr-3') organisationChairman is: 
+      div #{organisationChairman} 
+    div.row 
+      div(class='p-2 flex-fill organisationAttr mr-3') location is: 
+      div #{location}
