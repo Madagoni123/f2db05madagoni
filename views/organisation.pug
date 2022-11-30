@@ -8,8 +8,12 @@ block content
     div(class="row m-1")
        each item, index in results
            - let destination = `dispatch(\"/organisation/update?id=${item._id}\")`
+           - let destinationdelete = `dispatch(\"/organisation/delete?id=${item._id}\")`
+            - let destinationdetail = `dispatch(\"/organisation/detail?id=${item._id}\")`
            div(class="col-sm-2" width="215px") organisationName Type:#{item.organisationName}, oraganisationMembers:#{item.oraganisationMembers}, organisationChairman:#{item.organisationChairman}, location:#{item.location}
            button.btn( class="btn-primary ml-1", onclick= destination) Update
+           button.btn( class="btn-primary ml-1", onclick= destinationdelete) Delete
+           button.btn( class="btn-primary ml-1", onclick= destinationdetail) Detail
   
   script.
     function buy(index) {

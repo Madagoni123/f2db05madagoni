@@ -7,7 +7,7 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy; 
 passport.use(new LocalStrategy( 
   function(username, password, done) { 
-    Account.findOne({ username: username }, function (err, user) { 
+    account.findOne({ username: username }, function (err, user) { 
       if (err) { return done(err); } 
       if (!user) { 
         return done(null, false, { message: 'Incorrect username.' }); 
@@ -22,7 +22,7 @@ passport.use(new LocalStrategy(
  
 require('dotenv').config(); 
 const connectionString =  
-process.env.MONGO_CON 
+  process.env.MONGO_CON 
 mongoose = require('mongoose'); 
 mongoose.connect(connectionString,  
 {useNewUrlParser: true, 
@@ -32,11 +32,10 @@ var usersRouter = require('./routes/users');
 var organisationRouter = require('./routes/organisation');
 var gridbuildRouter = require('./routes/gridbuild');
 var selectorRouter = require('./routes/selector');
-var organisation = require("./models/organisation"); 
 var resourceRouter = require('./routes/resource');
-
-
 var app = express();
+var organisation = require("./models/organisation"); 
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -62,20 +61,6 @@ app.use('/gridbuild',gridbuildRouter);
 app.use('/selector', selectorRouter);
 app.use('/resource', resourceRouter);
 
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
-//Get the default connection 
-var db = mongoose.connection; 
- 
-//Bind connection to error event  
-db.on('error', console.error.bind(console, 'MongoDB connection error:')); 
-db.once("open", function(){ 
-  console.log("Connection to DB succeeded")}); 
-
-  // We can seed the collection if needed on server start 
 async function recreateDB(){ 
   // Delete everything 
   await organisation.deleteMany(); 
@@ -107,14 +92,20 @@ organisation({"organisationName":"public","oraganisationMembers":100,"organisati
   let reseed = true; 
   if (reseed) { recreateDB();}
 
-  // passport config 
+    // passport config 
 // Use the existing connection 
-// The Account model  
-var Account =require('./models/account'); 
+// The account model  
+var account =require('./models/account'); 
+
+passport.use(new LocalStrategy(account.authenticate())); 
+passport.serializeUser(account.serializeUser()); 
+passport.deserializeUser(account.deserializeUser()); 
+
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  next(createError(404));
+});
  
-passport.use(new LocalStrategy(Account.authenticate())); 
-passport.serializeUser(Account.serializeUser()); 
-passport.deserializeUser(Account.deserializeUser()); 
  
 // error handler
 app.use(function(err, req, res, next) {
